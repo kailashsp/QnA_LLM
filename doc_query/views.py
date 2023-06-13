@@ -10,10 +10,12 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 
 
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponse
 
 from doc_query.aws_langchain.kendra_chat_open_ai import build_chain,run_chain
 
+
+# chat_history = []
 class StatusView(APIView):
     #APIViewExample
     #Example of a simple api which supports both get and post requests
@@ -80,7 +82,7 @@ class SampleView(APIView):
 class chatbot(APIView):
     def __init__(self):
         self.qa = build_chain()
-        self.chat_history = []
+        
 
     def post(self, request):
         if request.method == "POST":
@@ -91,7 +93,12 @@ class chatbot(APIView):
             
             result = run_chain(self.qa, query)
             
-            response_data = {"answer": result['answer']}
- 
-            print(response_data)
-            return JsonResponse(response_data)
+            # response_data = {'ans':result['answer']}
+       
+            # chat_history.append((query,result['answer']))
+            # if len(chat_history) >=3:
+            #     chat_history[-3:-1]
+            # print(chat_history)
+            # result = result.split('```json\n')[1].split('\n```')[0]
+            res = result['answer'].split('```json\n')[1].split('\n```')[0]
+            return HttpResponse(res)

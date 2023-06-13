@@ -1,4 +1,7 @@
 from langchain.docstore.document import Document
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain
+from langchain.llms import OpenAI
 import boto3
 import re
 
@@ -20,6 +23,16 @@ def get_top_n_results(resp, count):
     return {"page_content":combined_text, "metadata":{"source":doc_uri, "title": doc_title, "excerpt": doc_excerpt, "type": r_type}}
 
 def kendra_query(kclient, kquery, kcount, kindex_id):
+    print(type(kquery))
+    prompt = PromptTemplate(
+    input_variables=["convo"],
+    template="Summarise the conversation {convo}?",
+)
+
+    llm= OpenAI(temperature=0)
+    chain = LLMChain(llm=llm, prompt=prompt)
+    kquery = chain.run(kquery)
+
     response = kclient.query(IndexId=kindex_id, QueryText=kquery.strip())
     if len(response["ResultItems"]) > kcount:
         r_count = kcount
