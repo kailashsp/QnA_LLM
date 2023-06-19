@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'doc_query',
+    'aws_langchain',
     'rest_framework',
     "corsheaders",
 ]

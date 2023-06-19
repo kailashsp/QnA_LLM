@@ -5,7 +5,9 @@ from typing import Any, Dict, List, Optional
 
 from langchain.schema import BaseRetriever, Document
 
-from doc_query.aws_langchain.kendra_results import kendra_query, kendra_client
+# from doc_query.aws_langchain.kendra_results import kendra_query, kendra_client
+from aws_langchain.kendra_results import kendra_query, kendra_client
+
 import boto3
 
 class KendraIndexRetriever(BaseRetriever):
@@ -29,7 +31,7 @@ class KendraIndexRetriever(BaseRetriever):
     kclient: Any
     """ boto3 client for Kendra. """
     
-    def __init__(self, kendraindex, awsregion, k=5, return_source_documents=False):
+    def __init__(self, kendraindex, awsregion, k=1, return_source_documents=False):
         self.kendraindex = kendraindex
         self.awsregion = awsregion
         self.k = k

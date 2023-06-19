@@ -12,7 +12,8 @@ from rest_framework import serializers
 
 from django.http import JsonResponse,HttpResponse
 
-from doc_query.aws_langchain.kendra_chat_open_ai import build_chain,run_chain
+from aws_langchain.kendra_chat_open_ai import build_chain,run_chain
+
 
 
 # chat_history = []
@@ -100,5 +101,18 @@ class chatbot(APIView):
             #     chat_history[-3:-1]
             # print(chat_history)
             # result = result.split('```json\n')[1].split('\n```')[0]
+            print(result)
             res = result['answer'].split('```json\n')[1].split('\n```')[0]
             return HttpResponse(res)
+
+
+class LexBot(APIView):
+
+    def post(self,request):
+        if request.method == "POST":
+            
+            data = json.loads(request.body)
+            
+            query = data.get("query")
+
+            
