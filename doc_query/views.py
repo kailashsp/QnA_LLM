@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import os
 from rest_framework.viewsets import ViewSet
 from rest_framework.views import APIView
 from common import format_response,get_validation_error_message
@@ -8,12 +9,12 @@ from rest_framework.status import HTTP_400_BAD_REQUEST,HTTP_200_OK,HTTP_403_FORB
 from rest_framework.permissions import AllowAny#,IsAuthenticated, IsAdminUser
 from django.contrib.auth.models import User
 from rest_framework import serializers
-
+import poe
 
 from django.http import JsonResponse,HttpResponse
 
 from aws_langchain.kendra_chat_open_ai import build_chain,run_chain
-
+from poe_chat import kendra_poe
 
 
 # chat_history = []
@@ -106,13 +107,22 @@ class chatbot(APIView):
             return HttpResponse(res)
 
 
-class LexBot(APIView):
+class poechat(APIView):
 
     def post(self,request):
         if request.method == "POST":
             
             data = json.loads(request.body)
             
-            query = data.get("query")
+            query = data.get("convo")
 
+            res = kendra_poe.poechat(query)
+            # client = poe.Client(token)
+            # result = []
+            # client.send_chat_break("a2")
+            # for chunk in client.send_message("a2", message):
+            #     result.append(chunk["text_new"])
             
+            # result = "".join(result)
+            # res = result.split('```json\n')[1].split('\n```')[0]
+            return HttpResponse(res)
